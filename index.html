@@ -61,9 +61,12 @@
 
         <div class="mermaid" style="text-align: center;">
             graph TD;
+            subgraph Environment
             A((Predator)) -->|Chase| B((Prey))
             B -->|Evade| A
+            end
 
+            style Environment fill:#FFFFFF,stroke:#333333,stroke-width:2px,rx:10,ry:10;
             style A fill:#8C1D40,stroke:#333333,stroke-width:2px,color:#FFFFFF;
             style B fill:#FFC627,stroke:#333333,stroke-width:2px,color:#333333;
         </div>
@@ -78,7 +81,7 @@
             <li><b>IMU (Inertial Measurement Unit):</b> Ensures stable movement by compensating for environmental variations and assisting with precise turning angles.</li>
         </ul>
 
-        <div class="mermaid" style="text-align: center;">
+        <div class="mermaid" style="text-align: center; border-color: white;">
             graph TD;
             A[Initialize Sensors] -->|LiDAR: Obstacle detection & path planning| B
             A -->|Depth Camera: Identify prey position| C
@@ -91,14 +94,14 @@
             G --> H[Real-Time Decision Making]
 
             subgraph "Sensor Data Collection"
-                B
-                C
-                D
+            B
+            C
+            D
             end
 
             subgraph "Real-Time Decision Making"
-                H1[Predator: Dynamic tracking]
-                H2[Prey: Sensor-based evasion]
+            H1[Predator: Dynamic tracking]
+            H2[Prey: Sensor-based evasion]
             end
 
             H --> H1
