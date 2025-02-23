@@ -6,6 +6,16 @@ body {
     color: #333;
 }
 
+/* Not Working
+main .flex-grow-1 .container.mt-5.pt-3 h1, 
+main .flex-grow-1 .container.mt-5.pt-3 h2, 
+main .flex-grow-1 .container.mt-5.pt-3 h3, 
+main .flex-grow-1 .container.mt-5.pt-3 h4, 
+main .flex-grow-1 .container.mt-5.pt-3 h5, 
+main .flex-grow-1 .container.mt-5.pt-3 h6 {
+    font-weight: bold;
+} */
+
 /*Broken At the moment*/
 /* .flex-grow-1.container.mt-5.pt-3 p {
     text-align: justify;
@@ -51,7 +61,7 @@ body {
 
 /* Main body links */
 main a {
-    color: #000;
+    color: #8C1D40;
     text-decoration: none;
 }
 
