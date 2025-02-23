@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd "$(dirname "$0")"  # Change to the directory of the script
+
 # Start the Python HTTP server
 py -m http.server 8000 &  # The '&' runs the server in the background
 
