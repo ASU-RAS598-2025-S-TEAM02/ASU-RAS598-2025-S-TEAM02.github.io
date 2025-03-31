@@ -9,5 +9,5 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     loadFooter();
 
-    setInterval(loadFooter, 5000);
+    // setInterval(loadFooter, 5000);
 });

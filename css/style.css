@@ -32,7 +32,8 @@ main .flex-grow-1 .container.mt-5.pt-3 h6 {
 }
 
 .navbar-light .navbar-nav .nav-link:hover {
-    color: #fff !important;
+    color: #ffffff !important;
+    font-weight: bold;
 }
 
 /* Footer */
@@ -52,7 +53,7 @@ main .flex-grow-1 .container.mt-5.pt-3 h6 {
 .footer a:hover {
     /* text-decoration: underline; */
     color: #8C1D40;
-    background-color: #FFC627;
+    background-color: #6F1A33;
     border-radius: 5px;
     text-align: center;
     /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -75,10 +76,16 @@ main a:hover {
 }
 
 .dropdown-item {
-    color:  #FFC627;
+    color: #FFC627;
 }
 
-.dropdown-item:hover {
-    background-color:  #FFC627;
+.dropdown-item:hover, 
+.dropdown-item:focus {
+    background-color: #FFC627;
     color: #8C1D40;
+}
+
+.dropdown-item:active {
+    background-color: #8C1D40 !important;
+    color: #ffffff !important;
 }

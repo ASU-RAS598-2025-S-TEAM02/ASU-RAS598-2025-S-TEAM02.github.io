@@ -6,8 +6,6 @@
     <title>RAS598 Team 02</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <script type="module" src="modules/controlpanel/controlpanel.js"></script> <!-- Import control panel script -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script> <!-- Include Mermaid library -->
 </head>
 <body class="d-flex flex-column min-vh-100">
 
@@ -15,224 +13,42 @@
 <div id="header-placeholder"></div>
 <script src="modules/header/header.js"></script>
 
-<!-- Main Content -->
 <main class="flex-grow-1">
-    <div class="container mt-5 pt-3">
-        <style>
-            h1, h2, h3 {
-                font-weight: bold;
-            }
-        </style>
-        <h1>Predator-Prey Dynamics Using ROS2 and TurtleBot 4 Lite</h1>
-        <table class="table table-bordered">
-            <tbody>
-            <tr>
-                <th scope="row">Team Members</th>
-                <td>Michael Gross, Praneeth Boddeti, Abhishek Parsi</td>
-            </tr>
-            <tr>
-                <th scope="row">Semester and Year</th>
-                <td>Spring 2025</td>
-            </tr>
-            <tr>
-                <th scope="row">University</th>
-                <td>Arizona State University</td>
-            </tr>
-            <tr>
-                <th scope="row">Class</th>
-                <td>Experimentation and Deployment of Robotic Systems (RAS598)</td>
-            </tr>
-            <tr>
-                <th scope="row">Professor</th>
-                <td>Dr. Aukes</td>
-            </tr>
-            </tbody>
-        </table>
-
-        <h2>Project Plan</h2>
-        <h3>Introduction</h3>
-        <p> 
-            This project aims to explore predator-prey dynamics using the TurtleBot 4 Lite in a controlled ROS Humble environment. The primary research question driving this work is:
-            <br><br>
-            <b>"How can the integration of ROS2-based control, sensor fusion, and SLAM improve the accuracy and stability of a predator-prey simulation in dynamic environments?"</b>
-            <br><br>
-            By leveraging ROS2's capabilities for real-time communication, sensor integration, and adaptive control, this project seeks to simulate biologically inspired behaviors in autonomous robots. The predator-prey model will demonstrate advanced navigation strategies, multi-agent coordination, and decision-making under dynamic conditions.
-        </p>
-
-        <div class="mermaid" style="text-align: center;">
-            graph TD;
-            subgraph Environment
-            A((Predator)) -->|Chase| B((Prey))
-            B -->|Evade| A
-            end
-
-            style Environment fill:#FFFFFF,stroke:#333333,stroke-width:2px,rx:10,ry:10;
-            style A fill:#8C1D40,stroke:#333333,stroke-width:2px,color:#FFFFFF;
-            style B fill:#FFC627,stroke:#333333,stroke-width:2px,color:#333333;
+    <div class="container mt-5 pt-3 text-center"></div>
+        <h1 class="text-center">Our Team</h1>
+        <hr class="my-4">
+        <div class="row justify-content-center mt-4">
+            <!-- Team Member 1 -->
+            <div class="col-md-4 text-center">
+                <img src="assets\mgross.jpeg" alt="Michael Gross" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                <p class="mt-2 fs-4">Michael Gross</p>
+            </div>
+            <!-- Team Member 2 -->
+            <div class="col-md-4 text-center">
+                <img src="assets\bpraneet.jpeg" alt="Praneeth Boddeti" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                <p class="mt-2 fs-4">Praneeth Boddeti</p>
+            </div>
+            <!-- Team Member 3 -->
+            <div class="col-md-4 text-center">
+                <img src="assets\abparsi.jpeg" alt="Abhishek Parsi" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                <p class="mt-2 fs-4">Abhishek Parsi</p>
+            </div>
         </div>
-        <figcaption style="text-align: center;">Figure 1: Predator-Prey Interaction</figcaption>
         <br>
+        <br>
+        <p class="text-center">We are a team of students from Arizona State University working on developing a "Predator-Prey" TurtleBot Project.
+            <br><em>Explore the tabs at the top of the screen for more details about our work.</em></p>
 
-        <h3>Sensor Integration</h3>
-        <p>Sensor data will play a critical role in enabling autonomous behavior for both the predator and prey robots. The following sensors on the TurtleBot 4 Lite will be utilized:</p>
-        <ul>
-            <li><b>LiDAR:</b> Used for obstacle detection and path planning to ensure safe navigation within the environment. LiDAR data will also aid in mapping the surroundings using SLAM.</li>
-            <li><b>Depth Camera:</b> Employed to identify the prey's position in real-time, enabling the predator to dynamically adjust its trajectory for pursuit.</li>
-            <li><b>IMU (Inertial Measurement Unit):</b> Ensures stable movement by compensating for environmental variations and assisting with precise turning angles.</li>
-        </ul>
-
-        <div class="mermaid" style="text-align: center; border-color: white;">
-            graph TD;
-            A[Initialize Sensors] -->|LiDAR: Obstacle detection & path planning| B
-            A -->|Depth Camera: Identify prey position| C
-            A -->|IMU: Movement stability & adjustments| D
-            B --> E[Data Logging & Analysis]
-            C --> E
-            D --> E
-            E --> F[Algorithm Adjustment]
-            F --> G[Testing & Refinement]
-            G --> H[Real-Time Decision Making]
-
-            subgraph "Sensor Data Collection"
-            B
-            C
-            D
-            end
-
-            subgraph "Real-Time Decision Making"
-            H1[Predator: Dynamic tracking]
-            H2[Prey: Sensor-based evasion]
-            end
-
-            H --> H1
-            H --> H2
-
-            style A fill:#8C1D40,stroke:#333333,stroke-width:2px,color:#FFFFFF,rx:10,ry:10;
-            style B fill:#FFC627,stroke:#333333,stroke-width:2px,color:#333333,rx:10,ry:10;
-            style C fill:#FFC627,stroke:#333333,stroke-width:2px,color:#333333,rx:10,ry:10;
-            style D fill:#FFC627,stroke:#333333,stroke-width:2px,color:#333333,rx:10,ry:10;
-            style E fill:#8C1D40,stroke:#333333,stroke-width:2px,color:#FFFFFF,rx:10,ry:10;
-            style F fill:#8C1D40,stroke:#333333,stroke-width:2px,color:#FFFFFF,rx:10,ry:10;
-            style G fill:#8C1D40,stroke:#333333,stroke-width:2px,color:#FFFFFF,rx:10,ry:10;
-            style H fill:#8C1D40,stroke:#333333,stroke-width:2px,color:#FFFFFF,rx:10,ry:10;
-            style H1 fill:#FFC627,stroke:#333333,stroke-width:2px,color:#333333,rx:10,ry:10;
-            style H2 fill:#FFC627,stroke:#333333,stroke-width:2px,color:#333333,rx:10,ry:10;
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-3 text-center">
+                <img src="assets/turtlebot.png" alt="TurtleBot 1" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+            </div>
+            <div class="col-md-3 text-center">
+                <img src="assets/turtlebot.png" alt="TurtleBot 2" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+            </div>
         </div>
-        <figcaption style="text-align: center;">Figure 2: Sensor Integration Flowchart</figcaption>
-        <br>
-
-        <h4>Data Logging and Analysis (Experimentation Phase)</h4>
-        <ul>
-            <li>Sensor data will be logged using ROSBag for replaying scenarios and debugging.</li>
-            <li>Movement algorithms will be refined based on logged data to optimize speed, turn rates, and responsiveness to obstacles.</li>
-            <li>Pursuit and evasion strategies will be iteratively improved by analyzing performance metrics such as reaction time, accuracy of detection, and path efficiency.</li>
-        </ul>
-
-        <h4>Final Demonstration</h4>
-        <ul>
-            <li>The predator robot will use real-time sensor data to track and pursue the prey based on continuously updated positions.</li>
-            <li>The prey robot will leverage sensor feedback to evade capture for three minutes by navigating dynamically around obstacles.</li>
-        </ul>
-        <p>This setup will showcase how adaptive control systems driven by sensory inputs can influence robot behavior in real-world scenarios.</p>
-
-        <h3>Interaction & Interface Design</h3>
-        <p>To facilitate interaction with the system and monitor performance, the following interface components will be developed:</p>
-
-        <h4>Visualization</h4>
-        <p>An RViz2 dashboard will display real-time sensor data, robot paths, and tracking information. This visualization will provide insights into how each robot perceives its environment and executes its strategies.</p>
-
-        <h4>Control Panel</h4>
-        <p>A user interface will allow parameter tuning such as speed, aggression level (for the predator), or evasiveness (for the prey). This panel will also enable starting/stopping simulations and adjusting difficulty levels.</p>
-
-        <h4>Data Logging</h4>
-        <p>Performance metrics such as chase success rate, evasion duration, and path efficiency will be logged in CSV or ROSBag files for post-simulation analysis.</p>
-
-        <h4>Web-Based Dashboard or GUI</h4>
-        <p>A web-based interface or ROS2-based GUI will allow users to interact with the robots remotely in real time.</p>
         
-        <control-panel></control-panel>
-        <figcaption style="text-align: center;">Figure 3: Sample Control Panel Interface</figcaption>
-        <br>
-
-        <h3>Control and Autonomy</h3>
-        <p>The control system integrates sensor feedback with decision-making algorithms to enable real-time autonomous behavior for both robots:</p>
-
-        <h4>Predator Logic</h4>
-        <ul>
-            <li>The predator robot will use a pursuit algorithm (e.g., proportional navigation) that dynamically updates its trajectory based on the prey’s last known position.</li>
-            <li>If the prey is lost from view, a search pattern algorithm will be activated until the target is reacquired.</li>
-            <li>Obstacle avoidance logic ensures smooth navigation while pursuing the prey.</li>
-        </ul>
-
-        <h4>Prey Logic</h4>
-        <ul>
-            <li>The prey robot will execute evasive maneuvers based on its distance from the predator and nearby obstacles.</li>
-            <li>Randomization in movement patterns will prevent predictable behavior, making it more challenging for the predator to capture it.</li>
-            <li>Sensor feedback will guide path adjustments to navigate around obstacles effectively.</li>
-        </ul>
-
-        <p>Both robots will operate using ROS2 control nodes that process sensor data and execute movement commands in real time.</p>
-
-
-        <h3>Preparation Needs</h3>
-        <ul>
-            <li><b>ROS2 Navigation Stack:</b> For efficient path planning and obstacle avoidance.</li>
-            <li><b>Real-Time Object Tracking:</b> To enhance detection accuracy using depth cameras.</li>
-            <li><b>PID Control:</b> For precise movement control during pursuit or evasion.</li>
-            <li><b>Sensor Fusion Techniques:</b> To combine data from multiple sensors (LiDAR, depth camera, IMU) for robust decision-making.</li>
-            <li><b>Multi-Agent Coordination Strategies:</b> To manage communication between robots effectively.</li>
-        </ul>
-        <p>Class coverage of advanced ROS2 control strategies, behavior-based robotics principles, effective sensor integration methods, and robust path-planning algorithms would significantly support this project’s goals.</p>
-
-
-        <h3>Final Demonstration</h3>
-        <p>This will feature an interactive predator-prey simulation in a controlled classroom environment:</p>
-        <ol>
-            <li>Two TurtleBot 4 Lite robots (predator and prey) will operate within a 3m x 3m area containing obstacles (e.g., classroom furniture).</li>
-            <li>The prey robot must evade capture for three minutes while navigating dynamically around obstacles.</li>
-            <li>The predator robot must actively pursue the prey using real-time sensor data and adaptive navigation strategies.</li>
-            <li>A projector will display RViz2 visualizations of sensor data and robot paths for audience observation.</li>
-        </ol>
-        <p>This setup highlights how biologically inspired behaviors can be modeled using robotics frameworks like ROS2 while demonstrating advanced multi-agent coordination.</p>
-
-        <h3>Impact</h3>
-        <p>This project has significant potential to enhance both personal learning outcomes and broader educational value:</p>
-        <ol>
-            <li>It offers hands-on experience with advanced robotics concepts such as multi-agent communication, trajectory planning, adaptive algorithms, SLAM integration, and biologically inspired behavior modeling.</li>
-            <li>It bridges theoretical knowledge with practical applications by simulating real-world dynamics through robotics systems.</li>
-            <li>It fosters interdisciplinary learning across robotics, artificial intelligence, biology-inspired systems, and control theory.</li>
-            <li>The project could serve as a foundation for course development by providing an engaging example of complex theoretical concepts applied in practice—promoting critical thinking, problem-solving skills, and technical expertise essential for advancing robotics education.</li>
-        </ol>
-
-
-        <h3>Advising</h3>
-        <p>Dr. Aukes has been identified as the faculty advisor for this project. While initial discussions about this idea have taken place during office hours, we plan to formally request his mentorship via email. His guidance is expected to provide access to specialized hardware resources (e.g., TurtleBot 4 Lite), expertise in robotics systems design using ROS2 frameworks, and valuable feedback on implementing advanced control strategies.</p>
-
-
-        <h3>Weekly Milestones</h3>
-        <div class="mermaid">
-            gantt
-            dateFormat  YYYY-MM-DD
-            section Planning
-            Ideation                  :done,    des1, 2025-02-23, 2025-03-01
-            section Development
-            Hardware Integration      :         des2, 2025-03-02, 2025-03-05
-            Interface Development     :         des3, 2025-03-05, 2025-03-10
-            Sensors                   :         des4, 2025-03-10, 2025-03-15
-            Controls & Autonomy       :         des5, 2025-03-15, 2025-03-22
-            section Testing
-            Simulation Testing        :         des6, 2025-03-22, 2025-03-29
-            Real-World Testing        :         des7, 2025-03-29, 2025-04-10
-            section Finalization
-            Data Analysis             :         des8, 2025-04-10, 2025-04-18
-            Final Report              :         des9, 2025-04-18, 2025-04-23
-            Presentation Preparation  :         des10, 2025-04-23, 2025-05-01
-        </div>
-        <figcaption style="text-align: center;">Figure 4: Gantt Chart of Weekly Milestones</figcaption>
-        <br>
-
     </div>
-
 </main>
 
 <!-- Footer -->
