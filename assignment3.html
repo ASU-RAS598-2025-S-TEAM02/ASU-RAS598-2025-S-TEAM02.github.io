@@ -21,46 +21,157 @@
         <hr class="my-4">
 
         <section class="mt-4">
-            <h3>Discussion 1</h3>
-            <p>Forward and backward convolution cannot be implemented in real-time streaming
-                applications because it requires future input samples that haven't occurred yet. This technique
-                creates zero-phase filters by applying the filter twice - once forward and once backward - 
-                which necessitates having the complete dataset available before processing begins. In real-time 
-                applications, we can only use causal filters that operate solely on present and past samples, 
-                making backward filtering impossible.</p>
-        </section>
+            <h3>IMU Data Collection, Filtering, and Analysis</h3>
+            <h4>1. Data Collection</h4>
+            <p>To analyze IMU sensor data, we recorded approximately 120 seconds of linear acceleration data from the /imu topic using the ros2 bag command. To ensure accurate timestamping, we implemented a mechanism that triggers a message on the /graphstatus topic when a button is pressed. This allowed us to align recorded data with specific events for better analysis.</p>
+            
+            <div class="text-center">
+                <img src="assets/imu_data/qt_graph.jpg" alt="QT Graph Visualization" class="img-fluid rounded" style="max-width: 30%; height: auto;">
+                <p class="mt-2"><em>Figure: QT Graph Visualization and Capture Tool for IMU data.</em></p>
+            </div>
 
-        <section class="mt-4">
-            <h3>Discussion 2</h3>
-            <p>As the window size of an FIR filter grows, several important changes occur in the filtered
-                data's profile: the transition band narrows, creating a steeper transition between passband and
-                stopband, which makes the filter more selective and closer to an ideal "brick wall" response.
-                This narrowing also decreases the main lobe width of the frequency response, enabling better
-                frequency resolution, particularly for closely spaced components. Longer filters can better
-                depict longer wavelengths, improving resolution of lower frequencies. Overall, the filter
-                response more closely approximates the ideal desired response, with smaller deviations from
-                the target frequency characteristics. These improvements collectively enhance the filter's
-                ability to precisely separate and process different frequency components in the input signal.</p>
-        </section>
+            <h4>2. Data Conversion & Extraction</h4>
+            <p>After collecting the IMU data, we converted the recorded ROS bag file into a YAML format to facilitate easier data manipulation. From this dataset, we extracted only the X-axis acceleration values. To visualize the raw data, we used Matplotlib, which revealed significant noise in the IMU signals. The raw data can be found in the <a href="data/imu.yaml" target="_blank">imu.yaml file</a>.</p>
+            
+            <div class="text-center">
+                <img src="assets/imu_data/imu_fuzzy_3d.png" alt="3D Fuzzy IMU Data Visualization" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                <p class="mt-2"><em>Figure: 3D visualization of Raw IMU data.</em></p>
+            </div>
+            <div class="text-center">
+                <img src="assets/imu_data/imu_raw_linear.png" alt="Raw IMU Linear Acceleration Data" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                <p class="mt-2"><em>Figure: Raw Time-Series IMU linear acceleration data collected from the sensor.</em></p>
+            </div>
 
-        <section class="mt-4">
-            <h3>Discussion 3</h3>
-            <p>FIR filters require the time series to be truncated by N (filter size) since:</p>
+            <h4>3. Noise Filtering</h4>
+            <p>To reduce noise in the IMU data, we experimented with various filters:</p>
             <ul>
-                <li>The convolution process requires N input samples to produce the first valid output</li>
-                <li>The first N-1 outputs are contaminated with startup transients and do not exhibit steady-state behavior</li>
-                <li>In linear-phase filters, this introduces a (N-1)/2 sample delay</li>
+                <li><strong>Kalman Filter:</strong> Adaptive noise reduction for real-time applications.</li>
+                <li><strong>Lowpass FIR Bartlett Window Filter:</strong> A simple yet effective method for noise suppression.</li>
+                <li><strong>Lowpass FIR Hamming Window Filter:</strong> Another FIR filter with better frequency response but some ringing effects.</li>
             </ul>
-            <strong>Disadvantages of Larger Filter Sizes</strong>
-            <ol>
-                <li>Data loss: Extra samples need to be discarded at the beginning/end of your data</li>
-                <li>Increased storage latency: More filters lead to greater processing time</li>
-                <li>Increased cost of computation: N multiply-accumulate operations are needed for each output</li>
-                <li>Increased memory requirement: More space needed for coefficients and history of samples</li>
-                <li>Additional settling time: Filter takes longer time to settle into steady-state behavior</li>
-            </ol>
-            <p>These compromises set up an intrinsic trade-off between frequency resolution and
-                implementation problems like processing time and storage space.</p>
+            <p>Each filtering method was implemented and analyzed in the <a href="https://github.com/ASU-RAS598-2025-S-TEAM02/ASU-RAS598-2025-S-TEAM02.github.io/blob/main/scripts/filtering_imu_data.ipynb" target="_blank">Jupyter Notebook file</a>.</p>
+            <div class="text-center">
+                <img src="assets/imu_data/imu_kalman_lowpass.png" alt="Comparison of Raw Data and Different Filtering Techniques" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                <p class="mt-2"><em>Figure: Comparison of raw data and different filtering techniques.</em></p>
+            </div>
+
+            <div class="text-center">
+                <img src="assets/imu_data/imu_kalman_short.png" alt="Filtered IMU Data with Kalman Filter (Short Duration)" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                <p class="mt-2"><em>Figure: Filtered IMU data using Kalman Filter for a short duration.</em></p>
+            </div>
+
+            <h4>4. Final Filter Selection</h4>
+            <p>After evaluating the performance of the filters, we selected the Lowpass FIR Bartlett Window Filter for the final script. This filter was chosen because it effectively minimized the Gibbs phenomenon—unwanted ripples and overshoots near sharp changes in data—resulting in a cleaner and more stable signal.</p>
+            <div class="text-center">
+                <img src="assets/imu_data/imu_x_filtered.png" alt="Filtered IMU Data using Bartlett Window Filter" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                <p class="mt-2"><em>Figure: Filtered IMU data using Bartlett Window Filter (note scaling changes).</em></p>
+            </div>
+
+            <h4>5. Discussion</h4>
+            <h5>5.1 Why Forward and Backward Convolution is Not Feasible in Real-Time Applications</h5>
+            <p>Forward and backward convolution cannot be implemented in real-time streaming applications because it requires future input samples that are not yet available. This technique is often used to create zero-phase filters, which apply the filter twice—once forward and once backward—to eliminate phase distortion. However, real-time processing requires causal filters that operate only on present and past samples, making backward filtering impossible.</p>
+
+            <h5>5.2 Effect of Increasing FIR Filter Window Size</h5>
+            <p>As the window size of an FIR filter increases, several key effects occur:</p>
+            <ul>
+                <li><strong>Narrower Transition Band:</strong> A larger window results in a sharper cutoff, making the filter more selective in frequency separation.</li>
+                <li><strong>Improved Low-Frequency Resolution:</strong> Longer filters are better at preserving long-wavelength components.</li>
+                <li><strong>Closer Approximation to Ideal Response:</strong> Larger filters provide better frequency separation but at the cost of increased computational complexity.</li>
+            </ul>
+            <div class="text-center">
+                <img src="assets/imu_data/comparison_fir_window_sizes.png" alt="Comparison of Different Window Sizes in FIR Filtering" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                <p class="mt-2"><em>Figure: Comparison of different window sizes in FIR filtering.</em></p>
+            </div>
+
+            <h5>5.3 Why FIR Filtering Requires Time Series Truncation</h5>
+            <p>FIR filters require truncation of the time series by the filter size (N) because:</p>
+            <ul>
+                <li>The convolution process requires at least N input samples to generate valid output.</li>
+                <li>The first (N-1) outputs are affected by transient effects and are unreliable.</li>
+                <li>Linear-phase filters introduce a delay of (N-1)/2 samples.</li>
+            </ul>
+            <p><strong>Trade-offs of Using Larger FIR Filters:</strong></p>
+            <ul>
+                <li><strong>Data Loss:</strong> More samples need to be discarded at the beginning and end.</li>
+                <li><strong>Increased Computation Time:</strong> Larger filters require more multiply-accumulate operations per output sample.</li>
+                <li><strong>Higher Memory Requirements:</strong> More coefficients and sample history must be stored.</li>
+                <li><strong>Additional Latency:</strong> The system takes longer to settle into steady-state behavior.</li>
+            </ul>
+            <p>These factors highlight the trade-off between frequency resolution and implementation feasibility in real-time systems.</p>
+            <!-- <p><em>(Insert Graph: Filter performance vs. computational cost)</em></p> -->
+
+            <!-- <h4>6. Conclusion</h4>
+            <p>Through this analysis, we successfully collected and processed IMU acceleration data, applied different filtering techniques, and selected the optimal filter based on noise reduction performance. The trade-offs between filter complexity, computational cost, and real-time feasibility were carefully considered, leading to an informed choice of the Lowpass FIR Bartlett Window Filter for practical use. Future work could involve exploring adaptive filtering methods to enhance real-time noise reduction further.</p>
+            <p><em>(Insert Final Summary Graph: Side-by-side comparison of raw and filtered IMU data)</em></p> -->
+        </section>
+        <section class="mt-4">
+            <h3>Project Execution and Findings</h3>
+
+            <h4>Transition from Virtual to Physical Systems</h4>
+            <p>To enhance the realism and applicability of our project, we transitioned from virtual simulations to a physical predator-prey system. This shift allowed us to:</p>
+            <ul>
+                <li>Perform hands-on troubleshooting and debugging in real-world scenarios.</li>
+                <li>Interact directly with noisy sensor data, providing a more authentic testing environment.</li>
+                <li>Gain deeper insights into the challenges of dynamic systems and robotics in practical applications.</li>
+            </ul>
+
+            <h4>Implementation Strategy</h4>
+            <p>Our implementation strategy focused on integrating multiple data streams and visualization tools to create a cohesive system. Key components included:</p>
+            <ul>
+                <li>Real-time IMU data visualization from the predator robot, leveraging ESP32/Raspberry Pi systems for data acquisition and processing.</li>
+                <li>Live camera feed integration to enable prey detection and obstacle avoidance.</li>
+                <li>LIDAR-based SLAM mapping, displayed in the GUI's top-right corner, to facilitate real-time path planning and navigation.</li>
+            </ul>
+
+            <div class="text-center mt-4">
+                <img src="assets/imu_data/GUI_concept.png" alt="GUI Concept Design" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                <p class="mt-2"><em>Figure: Conceptual design of the GUI for the predator-prey system.</em></p>
+            </div>
+
+            <h4>Key Data Components</h4>
+            <p>The system relied on three primary data sources:</p>
+            <ul>
+                <li><strong>IMU Data:</strong> Provided critical information about the robot's orientation and acceleration, essential for motion tracking and stability control.</li>
+                <li><strong>Camera Feed:</strong> Enabled object detection and obstacle avoidance, enhancing the robot's ability to interact with its environment.</li>
+                <li><strong>LIDAR Scans:</strong> Generated SLAM maps for real-time path planning and navigation, ensuring efficient movement through the environment.</li>
+            </ul>
+
+            <h4>Simplified Sensor Simulation Setup</h4>
+            <h5>Predator-Prey Data Simulation</h5>
+            <p>To simulate the predator-prey interaction, we generated dummy IMU data for both robots:</p>
+            <ul>
+                <li>Unfiltered data simulated prey movements, providing a noisy baseline for comparison.</li>
+                <li>Filtered data represented predator movements, showcasing the effectiveness of noise reduction techniques.</li>
+            </ul>
+
+            <h5>Camera Data Simulation</h5>
+            <p>In the absence of a physical camera, we developed a simulated camera data generator that:</p>
+            <ul>
+                <li>Published dummy image data to the <code>/camera</code> topic, mimicking real-world camera behavior.</li>
+                <li>Injected noise bursts when the camera button was clicked during ROS2 bag playback, simulating environmental disturbances.</li>
+            </ul>
+
+            <h5>LIDAR and SLAM Simulation</h5>
+            <p>We created synthetic LIDAR scans, published to the <code>/slam</code> topic, and processed the data into an occupancy grid. This allowed us to simulate real-time mapping and navigation capabilities.</p>
+
+            <div class="text-center mt-4">
+                <video controls class="img-fluid rounded" style="max-width: 100%; height: auto; aspect-ratio: 1/1;">
+                    <source src="assets/imu_data/gui_demonstration_snip.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p class="mt-2"><em>Figure: Concept demonstration of the GUI in use with dummy data.</em></p>
+            </div>
+
+            <h4>Key Considerations</h4>
+            <p>Several factors were taken into account to ensure the validity and robustness of the simulations:</p>
+            <ul>
+                <li>All simulated data was designed to closely mimic real-world sensor behavior, providing a realistic testing environment.</li>
+                <li>Noise injection was used to evaluate the system's performance under imperfect conditions, highlighting its resilience and adaptability.</li>
+                <li>The Bartlett window filter was particularly effective in improving the quality of simulated predator movements, demonstrating its practical utility.</li>
+            </ul>
+
+            <h4>Outcome</h4>
+            <p>Through this approach, we successfully tested SLAM integration, path planning, and GUI visualization without relying on physical sensors. The system's robustness was thoroughly evaluated using simulated noise and filtering techniques, providing valuable insights for future development and deployment.</p>
         </section>
     </div>
 </main>
