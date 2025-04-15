@@ -14,7 +14,7 @@ class ControlPanel extends HTMLElement {
                 }
 
                 .container {
-                    width: 50%;
+                    width: 80%;
                     margin: auto;
                     padding: 20px;
                     border: 5px solid #000000;
@@ -24,88 +24,125 @@ class ControlPanel extends HTMLElement {
                     text-align: center;
                 }
 
-                .control-group {
-                    margin: 15px 0;
+                .screen {
+                    position: relative;
+                    width: 100%;
+                    height: 300px;
+                    border: 2px solid #000000;
+                    border-radius: 5px;
+                    background-color: #e0e0e0;
+                    margin-bottom: 20px;
+                }
+
+                .overlay {
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
+                    width: 100px;
+                    height: 100px;
+                    border: 2px solid #000000;
+                    background-color: #ffffff;
+                    font-size: 12px;
+                    text-align: center;
+                    line-height: 100px;
+                }
+
+                .slam-view {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    width: 150px;
+                    height: 150px;
+                    border: 2px solid #000000;
+                    background-color: #ffffff;
+                    font-size: 12px;
+                    text-align: center;
+                    line-height: 150px;
+                }
+
+                .button-grid {
                     display: flex;
-                    align-items: center;
-                    justify-content: center;
+                    justify-content: space-around;
+                    margin-top: 20px;
                 }
 
-                .control-group label {
-                    flex: 1;
-                    text-align: right;
-                    margin-right: 10px;
-                }
-
-                .control-group input[type="range"] {
-                    flex: 2;
-                    margin-left: 10px;
-                }
-
-                .button-group {
-                    display: flex;
-                    justify-content: center;
-                    gap: 10px;
-                }
-
-                button {
-                    padding: 10px 20px;
-                    margin: 5px;
+                .button-grid button {
+                    padding: 15px;
                     border: none;
                     background-color: #8C1D40;
                     color: white;
                     border-radius: 5px;
                     cursor: pointer;
+                    font-size: 16px;
+                    width: 150px;
                 }
 
-                button:hover {
+                .button-grid button:hover {
                     background-color: #b35875;
+                }
+
+                .start-button {
+                    margin-top: 20px;
+                    padding: 20px;
+                    font-size: 18px;
+                    background-color: #FFC627;
+                    border: none;
+                    color: white;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    width: 300px;
+                    color: black;
+                }
+
+                .start-button:hover {
+                    background-color:rgb(215, 167, 34);
+                    color: black;
                 }
             </style>
             <div class="container">
                 <h1>Simulation Controller</h1>
-                <div class="control-group">
-                    <label for="predator-speed">Predator Speed:</label>
-                    <input type="range" id="predator-speed" min="1" max="10" step="1">
+                <div class="screen" id="camera-screen">
+                    <div class="overlay">IMU DATA</div>
+                    <div class="slam-view">SLAM VIEW</div>
                 </div>
-                <div class="control-group">
-                    <label for="prey-speed">Prey Speed:</label>
-                    <input type="range" id="prey-speed" min="1" max="10" step="1">
+                <div class="button-grid">
+                    <button id="imu-btn">rpi_05/imu</button>
+                    <button id="camera-btn">rpi_05/camera</button>
+                    <button id="esp-btn">esp/imu</button>
                 </div>
-                <div class="button-group">
-                    <button id="start-btn">Start Simulation</button>
-                    <button id="stop-btn">Stop Simulation</button>
-                    <button id="reset-btn">Reset</button>
-                </div>
-                <div class="control-group">
-                    <h3>Status: <span id="status">Idle</span></h3>
-                </div>
+                <button class="start-button" id="start-predator-prey-btn">START PREDATOR VS PREY</button>
             </div>
         `;
     }
 
     connectedCallback() {
-        this.shadowRoot.getElementById('start-btn').addEventListener('click', this.startSimulation.bind(this));
-        this.shadowRoot.getElementById('stop-btn').addEventListener('click', this.stopSimulation.bind(this));
-        this.shadowRoot.getElementById('reset-btn').addEventListener('click', this.resetSimulation.bind(this));
+        this.shadowRoot.getElementById('imu-btn').addEventListener('click', this.handleIMUClick.bind(this));
+        this.shadowRoot.getElementById('camera-btn').addEventListener('click', this.handleCameraClick.bind(this));
+        this.shadowRoot.getElementById('esp-btn').addEventListener('click', this.handleESPClick.bind(this));
+        this.shadowRoot.getElementById('start-predator-prey-btn').addEventListener('click', this.startPredatorPrey.bind(this));
     }
 
     disconnectedCallback() {
-        this.shadowRoot.getElementById('start-btn').removeEventListener('click', this.startSimulation.bind(this));
-        this.shadowRoot.getElementById('stop-btn').removeEventListener('click', this.stopSimulation.bind(this));
-        this.shadowRoot.getElementById('reset-btn').removeEventListener('click', this.resetSimulation.bind(this));
+        this.shadowRoot.getElementById('imu-btn').removeEventListener('click', this.handleIMUClick.bind(this));
+        this.shadowRoot.getElementById('camera-btn').removeEventListener('click', this.handleCameraClick.bind(this));
+        this.shadowRoot.getElementById('esp-btn').removeEventListener('click', this.handleESPClick.bind(this));
+        this.shadowRoot.getElementById('start-predator-prey-btn').removeEventListener('click', this.startPredatorPrey.bind(this));
     }
 
-    startSimulation() {
-        this.shadowRoot.getElementById('status').textContent = 'Running';
+    handleIMUClick() {
+        console.log('IMU button clicked');
     }
 
-    stopSimulation() {
-        this.shadowRoot.getElementById('status').textContent = 'Stopped';
+    handleCameraClick() {
+        console.log('Camera button clicked');
     }
 
-    resetSimulation() {
-        this.shadowRoot.getElementById('status').textContent = 'Idle';
+    handleESPClick() {
+        console.log('ESP button clicked');
+    }
+
+    startPredatorPrey() {
+        console.log('Starting Predator vs Prey simulation');
     }
 }
 

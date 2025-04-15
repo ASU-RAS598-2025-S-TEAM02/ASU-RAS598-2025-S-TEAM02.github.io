@@ -159,14 +159,14 @@
 
         <h4>Predator Logic</h4>
         <ul>
-            <li>The predator robot will use a pursuit algorithm (e.g., proportional navigation) that dynamically updates its trajectory based on the prey’s last known position.</li>
+            <li>The predator robot will use a pursuit algorithm (ie. proportional navigation) that dynamically updates its trajectory based on the prey's last known position.</li>
             <li>If the prey is lost from view, a search pattern algorithm will be activated until the target is reacquired.</li>
-            <li>Obstacle avoidance logic ensures smooth navigation while pursuing the prey.</li>
+            <li>Obstacle avoidance logic (ie. SLAM) ensures smooth navigation while pursuing the prey.</li>
         </ul>
 
         <h4>Prey Logic</h4>
         <ul>
-            <li>The prey robot will execute evasive maneuvers based on its distance from the predator and nearby obstacles.</li>
+            <li>The prey robot will evade the predator via teleoperated motion.</li>
             <li>Randomization in movement patterns will prevent predictable behavior, making it more challenging for the predator to capture it.</li>
             <li>Sensor feedback will guide path adjustments to navigate around obstacles effectively.</li>
         </ul>
@@ -188,7 +188,7 @@
         <h3>Final Demonstration</h3>
         <p>This will feature an interactive predator-prey simulation in a controlled classroom environment:</p>
         <ol>
-            <li>Two TurtleBot 4 Lite robots (predator and prey) will operate within a 3m x 3m area containing obstacles (e.g., classroom furniture).</li>
+            <li>One TurtleBot 4 Lite robot (predator) and an IMU-equipped ESP32 (prey) will operate within a 3m x 3m area containing obstacles (e.g., classroom furniture).</li>
             <li>The prey robot must evade capture for three minutes while navigating dynamically around obstacles.</li>
             <li>The predator robot must actively pursue the prey using real-time sensor data and adaptive navigation strategies.</li>
             <li>A projector will display RViz2 visualizations of sensor data and robot paths for audience observation.</li>
@@ -219,13 +219,12 @@
             Hardware Integration      :         des2, 2025-03-02, 2025-03-05
             Interface Development     :         des3, 2025-03-05, 2025-03-10
             Sensors                   :         des4, 2025-03-10, 2025-03-15
-            Controls & Autonomy       :         des5, 2025-03-15, 2025-03-22
+            Controls & Autonomy       :         des5, 2025-03-15, 2025-03-29
             section Testing
-            Simulation Testing        :         des6, 2025-03-22, 2025-03-29
-            Real-World Testing        :         des7, 2025-03-29, 2025-04-10
+            Real-World Testing        :         des7, 2025-03-29, 2025-04-17
             section Finalization
-            Data Analysis             :         des8, 2025-04-10, 2025-04-18
-            Final Report              :         des9, 2025-04-18, 2025-04-23
+            Data Analysis             :         des8, 2025-04-17, 2025-04-20
+            Final Report              :         des9, 2025-04-20, 2025-04-23
             Presentation Preparation  :         des10, 2025-04-23, 2025-05-01
         </div>
         <figcaption style="text-align: center;">Figure 4: Gantt Chart of Weekly Milestones</figcaption>
