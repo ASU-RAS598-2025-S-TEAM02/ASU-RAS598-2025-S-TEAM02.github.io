@@ -169,17 +169,18 @@
         <p>An RViz2 dashboard will display real-time sensor data, robot paths, and tracking information. This visualization will provide insights into how each robot perceives its environment and executes its strategies.</p>
 
         <h4>Control Panel</h4>
-        <p>A user interface will allow parameter tuning such as speed, aggression level (for the predator), or evasiveness (for the prey). This panel will also enable starting/stopping simulations and adjusting difficulty levels.</p>
+        <p>The control panel will allow users to manage IMU and camera feeds, as well as interact with the IMU for data visualization and analysis.</p>
 
-        <h4>Data Logging</h4>
-        <p>Performance metrics such as chase success rate, evasion duration, and path efficiency will be logged in CSV or ROSBag files for post-simulation analysis.</p>
-
-        <h4>Web-Based Dashboard or GUI</h4>
-        <p>A web-based interface or ROS2-based GUI will allow users to interact with the robots remotely in real time.</p>
-        
         <control-panel></control-panel>
         <figcaption style="text-align: center;">Figure 3: Sample Control Panel Interface</figcaption>
         <br>
+
+        <h4>Web-Based Dashboard or GUI</h4>
+        <p>A web-based interface or ROS2-based GUI will allow users to interact with the robots remotely in real time.</p>
+
+        <h4>Data Logging</h4>
+        <p>Performance metrics such as chase success rate, evasion duration, and path efficiency will be logged in CSV or ROSBag files for post-simulation analysis.</p>
+    
 
         <div class="mermaid" style="text-align: center;">
             graph TD
@@ -223,16 +224,6 @@
         <figcaption style="text-align: center;">Figure 4: IMU Data Flow Diagram for GUI Interface</figcaption>
         <br>
 
-        <h5 style="text-align: center;">SLAM Demonstration</h5>
-        <div style="display: flex; justify-content: center;">
-            <video controls width="75%" style="border: 1px solid #ccc; border-radius: 5px;">
-            <source src="assets/slam_data/slam_demonstration.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-            </video>
-        </div>
-        <figcaption style="text-align: center;">Figure 5: SLAM Demonstration Video</figcaption>
-        <br>
-
         <h3>Control and Autonomy</h3>
         <p>The control system integrates sensor feedback with decision-making algorithms to enable real-time autonomous behavior for both systems:</p>
 
@@ -249,6 +240,85 @@
             <li>Randomization in movement patterns will prevent predictable behavior, making it more challenging for the predator to capture it.</li>
             <li>Sensor feedback will guide path adjustments to navigate around obstacles effectively.</li>
         </ul>
+
+        <h4>SLAM Demonstration</h4>
+        <div style="display: flex; justify-content: center;">
+            <video controls width="75%" style="border: 1px solid #ccc; border-radius: 5px;">
+            <source src="assets/slam_data/slam_demonstration.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+            </video>
+        </div>
+        <figcaption style="text-align: center;">Figure 5: SLAM Demonstration Video</figcaption>
+        <br>
+
+        <h4>ROS2 RQT Graph</h4>
+        <p>The graph provides a visual representation of the nodes and topics in the system, showcasing the communication flow between various components.</p>
+        <div class="mermaid" style="text-align: center;">
+            graph TD
+
+            %% Color Classes
+            classDef asuGold fill:#FFC627,stroke:#000000,stroke-width:2px,color:#000000;
+            classDef asuMaroon fill:#8C1D40,stroke:#000000,stroke-width:2px,color:#FFFFFF;
+            classDef clusterStyle fill:#f2f2f2,stroke:#333,stroke-width:1px;
+
+            %% Outer Cluster for rpi_05 Node
+            subgraph rpi_05
+                class rpi_05 clusterStyle;
+
+                %% navigate_to_pose cluster
+                subgraph navigate_to_pose
+                    class navigate_to_pose clusterStyle;
+
+                    A1[rpi_05/navigate_to_pose]
+                    A2[rpi_05/navigate_to_pose/_action]
+                    A3[rpi_05/navigate_to_pose/_action/feedback]
+                    A4[rpi_05/navigate_to_pose/_action/status]
+
+                    A1 --> A2
+                    A2 --> A3
+                    A2 --> A4
+
+                    class A1,A2,A3,A4 asuMaroon;
+                end
+
+                %% navigate_through_poses cluster
+                subgraph navigate_through_poses
+                    class navigate_through_poses clusterStyle;
+
+                    B1[rpi_05/navigate_through_poses]
+                    B2[rpi_05/navigate_through_poses/_action]
+                    B3[rpi_05/navigate_through_poses/_action/feedback]
+                    B4[rpi_05/navigate_through_poses/_action/status]
+
+                    B1 --> B2
+                    B2 --> B3
+                    B2 --> B4
+
+                    class B1,B2,B3,B4 asuMaroon;
+                end
+
+                %% Standalone Topics
+                C1[rpi_05/waypoints]
+                C2[rpi_05/map]
+                D[rpi_05/transform_listener_impl_55c85d606e10]
+                class C1,C2 asuGold;
+
+                %% Inferred useful connections
+                C1 --> B1
+                C2 --> A1
+                C2 --> B1
+            end
+
+            %% External Connections
+            E[imu_data_logger]
+
+            D --> E
+
+            class D,E asuGold;
+        </div>
+        <figcaption style="text-align: center;">Figure 6: ROS2 RQT Graph</figcaption>
+        <br>
+
 
         <h3>Combining Data Sources for Low-Level and High-Level Decisions</h3>
         <p>The integration of data from multiple sensors is essential for enabling both low-level feedback control and high-level autonomy in the predator-prey simulation. This approach ensures that the system can respond to real-time environmental changes while executing strategic behaviors:</p>
@@ -332,7 +402,7 @@
             
             style D1 fill:#D6EAF8,stroke:#333,stroke-width:2px,color:#000
         </div>
-        <figcaption style="text-align: center;">Figure 6: Simulation Workflow</figcaption>
+        <figcaption style="text-align: center;">Figure 7: Simulation Workflow</figcaption>
         <br>
 
         <p>This layered approach ensures that the system can respond quickly to environmental changes while maintaining strategic objectives, enabling a seamless blend of reactive and deliberative behaviors.</p>
@@ -393,7 +463,7 @@
             Final Report              :         des9, 2025-04-20, 2025-04-23
             Presentation Preparation  :         des10, 2025-04-23, 2025-05-01
         </div>
-        <figcaption style="text-align: center;">Figure 7: Gantt Chart of Weekly Milestones</figcaption>
+        <figcaption style="text-align: center;">Figure 8: Gantt Chart of Weekly Milestones</figcaption>
         <br>
 
     </div>
