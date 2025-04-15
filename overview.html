@@ -83,21 +83,15 @@
 
         <div class="mermaid" style="text-align: center; border-color: white;">
             graph TD;
-            A[Initialize Sensors] -->|LiDAR: Obstacle detection & path planning| B
-            A -->|Depth Camera: Identify prey position| C
-            A -->|IMU: Movement stability & adjustments| D
+            A[Initialize Sensors] -->|LiDAR: Obstacle detection & path planning| B[Sensor Data Collection]
+            A -->|Depth Camera: Identify prey position| C[Sensor Data Collection]
+            A -->|IMU: Movement stability & adjustments| D[Sensor Data Collection]
             B --> E[Data Logging & Analysis]
             C --> E
             D --> E
             E --> F[Algorithm Adjustment]
             F --> G[Testing & Refinement]
             G --> H[Real-Time Decision Making]
-
-            subgraph "Sensor Data Collection"
-            B
-            C
-            D
-            end
 
             subgraph "Real-Time Decision Making"
             H1[Predator: Dynamic tracking]
@@ -154,8 +148,50 @@
         <figcaption style="text-align: center;">Figure 3: Sample Control Panel Interface</figcaption>
         <br>
 
+        <div class="mermaid" style="text-align: center;">
+            graph TD
+
+            %% IMU Logger
+            subgraph IMU_Logger
+                A[IMUDataLogger<br>ROS 2 Node]
+            end
+
+            B[<b>GraphView Widget</b><br>Plots IMU Data<br><b>Buttons:</b><br>- Subscribe Camera<br>- Subscribe Map<br>- Query Data at Time]
+            
+            %% Graph View + Telemetry Subscriptions
+            subgraph Telemetry_UI
+                C[RPI IMU Callback<br>Updates RPI IMU Buffer]
+                D[ESP IMU Callback<br>Updates ESP IMU Buffer]
+            end
+            
+            %% Camera and Map Windows
+            subgraph Visualization_Windows
+                E[CameraWindow<br>Displays Live Feed]
+                F[MapWindow<br>Shows Occupancy Grid<br>Draws Pose via QPainter]
+            end
+            
+            %% Connections
+            A --> B
+            B -->|/rpi_05/imu| C
+            B -->|/esp/imu_data| D
+            B -->|/rpi_05/oakd/image/preview| E
+            B --> |/rpi_05/pose| F
+            B --> |/rpi_05/map| F
+            B --> |/rpi_05/scan| F
+            
+            %% Styles
+            style A fill:#8C1D40,stroke:#333,stroke-width:2px,color:#FFFFFF,rx:10,ry:10
+            style B fill:#FFC627,stroke:#333,stroke-width:2px,color:#000,rx:10,ry:10
+            style C fill:#D6EAF8,stroke:#333,stroke-width:2px,color:#000,rx:10,ry:10
+            style D fill:#D6EAF8,stroke:#333,stroke-width:2px,color:#000,rx:10,ry:10
+            style E fill:#D6EAF8,stroke:#333,stroke-width:2px,color:#000,rx:10,ry:10
+            style F fill:#D6EAF8,stroke:#333,stroke-width:2px,color:#000,rx:10,ry:10
+        </div>
+        <figcaption style="text-align: center;">Figure 4: IMU Data Flow Diagram for GUI Interface</figcaption>
+        <br>
+
         <h3>Control and Autonomy</h3>
-        <p>The control system integrates sensor feedback with decision-making algorithms to enable real-time autonomous behavior for both robots:</p>
+        <p>The control system integrates sensor feedback with decision-making algorithms to enable real-time autonomous behavior for both systems:</p>
 
         <h4>Predator Logic</h4>
         <ul>
@@ -171,7 +207,7 @@
             <li>Sensor feedback will guide path adjustments to navigate around obstacles effectively.</li>
         </ul>
 
-        <p>Both robots will operate using ROS2 control nodes that process sensor data and execute movement commands in real time.</p>
+        <p>Both systems will operate using ROS2 control nodes that process sensor data and execute movement commands in real time.</p>
 
 
         <h3>Preparation Needs</h3>
@@ -206,7 +242,7 @@
 
 
         <h3>Advising</h3>
-        <p>Dr. Aukes has been identified as the faculty advisor for this project. While initial discussions about this idea have taken place during office hours, we plan to formally request his mentorship via email. His guidance is expected to provide access to specialized hardware resources (e.g., TurtleBot 4 Lite), expertise in robotics systems design using ROS2 frameworks, and valuable feedback on implementing advanced control strategies.</p>
+        <p>Dr. Aukes has been identified as the faculty advisor for this project. While initial discussions about this idea have taken place during office hours, we plan to formally request his mentorship via email. His guidance is expected to provide access to specialized hardware resources (e.g., TurtleBot 4 Lite, ESP32, IMU), expertise in robotics systems design using ROS2 frameworks, and valuable feedback on implementing advanced control strategies.</p>
 
 
         <h3>Weekly Milestones</h3>
@@ -219,15 +255,15 @@
             Hardware Integration      :         des2, 2025-03-02, 2025-03-05
             Interface Development     :         des3, 2025-03-05, 2025-03-10
             Sensors                   :         des4, 2025-03-10, 2025-03-15
-            Controls & Autonomy       :         des5, 2025-03-15, 2025-03-29
+            Controls & Autonomy       :         des5, 2025-03-15, 2025-04-07
             section Testing
-            Real-World Testing        :         des7, 2025-03-29, 2025-04-17
+            Real-World Testing        :         des7, 2025-04-07, 2025-04-20
             section Finalization
-            Data Analysis             :         des8, 2025-04-17, 2025-04-20
+            Data Analysis             :         des8, 2025-04-20, 2025-04-20
             Final Report              :         des9, 2025-04-20, 2025-04-23
             Presentation Preparation  :         des10, 2025-04-23, 2025-05-01
         </div>
-        <figcaption style="text-align: center;">Figure 4: Gantt Chart of Weekly Milestones</figcaption>
+        <figcaption style="text-align: center;">Figure 5: Gantt Chart of Weekly Milestones</figcaption>
         <br>
 
     </div>
