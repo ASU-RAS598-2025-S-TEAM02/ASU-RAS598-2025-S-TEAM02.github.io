@@ -80,6 +80,39 @@
             <li><b>Depth Camera:</b> Employed to identify the prey's position in real-time, enabling the predator to dynamically adjust its trajectory for pursuit.</li>
             <li><b>IMU (Inertial Measurement Unit):</b> Ensures stable movement by compensating for environmental variations and assisting with precise turning angles.</li>
         </ul>
+        <h4>Filtering and Sensor Data Conditioning</h3>
+        <p>To ensure the accuracy and reliability of sensor data, the following filtering and conditioning techniques will be applied:</p>
+        <ul>
+            <li><b>LiDAR:</b> 
+                <ul>
+                    <li>Outlier removal using statistical filters to eliminate noise from spurious reflections.</li>
+                    <li>Downsampling point clouds to reduce computational load while preserving essential spatial information.</li>
+                    <!-- <li>Applying voxel grid filters for uniform data representation in SLAM algorithms.</li> -->
+                </ul>
+            </li>
+            <!-- <li><b>Depth Camera:</b> 
+                <ul>
+                    <li>Median filtering to smooth depth images and reduce noise caused by environmental factors.</li>
+                    <li>Edge detection algorithms to enhance object boundaries for better prey tracking.</li>
+                    <li>Calibration to correct lens distortion and ensure accurate depth measurements.</li>
+                </ul>
+            </li> -->
+            <li><b>IMU:</b> 
+                <ul>
+                    <li>Barlett and/or lowpass filtering to remove high-frequency noise from accelerometer and gyroscope data. (See <a href="assignment3.html">Filtering Analysis</a>)</li>
+                    <li>Sensor fusion using complementary or Kalman filters to combine IMU data with other sources for improved orientation estimation.</li>
+                    <li>Bias correction to account for drift in gyroscope readings over time. This will be implemented on the ESP32 IMU as a large proportion of the prey localization will be based on this data stream.</li>
+                </ul>
+            </li>
+            <li><b>Computer Vision/Fiducial Tag Tracking:</b> 
+                <ul>
+                    <li>Applying moving average filters to smooth custom sensor data streams for improved accuracy.</li>
+                    <li>Normalizing data to ensure compatibility with control algorithms and enhance decision-making processes.</li>
+                    <li>Implementing object detection algorithms to improve tracking accuracy and responsiveness.</li>
+                </ul>
+            </li>
+        </ul>
+        <p>These techniques will ensure that the sensor data is robust, accurate, and suitable for real-time decision-making in dynamic environments.</p>
 
         <div class="mermaid" style="text-align: center; border-color: white;">
             graph TD;
