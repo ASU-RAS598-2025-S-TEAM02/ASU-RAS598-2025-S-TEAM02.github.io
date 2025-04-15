@@ -240,6 +240,93 @@
             <li>Sensor feedback will guide path adjustments to navigate around obstacles effectively.</li>
         </ul>
 
+        <h3>Combining Data Sources for Low-Level and High-Level Decisions</h3>
+        <p>The integration of data from multiple sensors is essential for enabling both low-level feedback control and high-level autonomy in the predator-prey simulation. This approach ensures that the system can respond to real-time environmental changes while executing strategic behaviors:</p>
+
+        <h4>Low-Level Decisions (Feedback Control)</h4>
+        <ul>
+            <li><b>Sensor Data Acquisition:</b> Raw data from LiDAR, depth cameras, and IMUs is collected and processed in real time.</li>
+            <li><b>Filtering and Noise Reduction:</b> Techniques such as statistical filters, median filters, and low-pass filters are applied to ensure clean and reliable data.</li>
+            <li><b>Immediate Actions:</b> Low-level control handles tasks like obstacle avoidance, trajectory adjustments, and maintaining stability.</li>
+        </ul>
+
+        <h4>High-Level Decisions (Autonomy)</h4>
+        <ul>
+            <li><b>Path Planning:</b> Processed sensor data is used to compute optimal paths for pursuit or evasion.</li>
+            <li><b>Behavioral Decision-Making:</b> Strategies such as search patterns, pursuit algorithms, and evasion tactics are implemented at this level.</li>
+            <li><b>Multi-Agent Coordination:</b> Communication between the predator and prey systems ensures synchronized interactions.</li>
+        </ul>
+
+        <h4>Integration Strategy</h4>
+        <p>The integration of these layers is achieved through a modular ROS2 architecture:</p>
+        <ul>
+            <li><b>ROS2 Nodes:</b> Dedicated nodes handle specific tasks, such as sensor data processing, control commands, and decision-making.</li>
+            <li><b>Data Flow:</b> Low-level nodes publish filtered sensor data to topics, which are then subscribed to by high-level nodes for further processing.</li>
+            <li><b>Feedback Loop:</b> High-level decisions are translated into low-level commands, creating a continuous feedback loop for adaptive behavior.</li>
+        </ul>
+
+        <div class="mermaid" style="text-align: center;">
+            graph TD
+
+            %% Sensor Inputs
+            A1[IMU - RPI]
+            A2[IMU - ESP]
+            A3[Camera Feed]
+            A4[Occupancy Grid - SLAM]
+            A5[Pose Data]
+            
+            %% Data Processing
+            B1[IMU Handler<br>Orientation Estimation<br>+ Filtering]
+            B2[Camera Processor<br>Object Detection]
+            B3[Map Processor<br>Update Grid]
+            B4[Pose Handler<br>Estimate Pose<br>+ Smoothing]
+            
+            %% Control Layers
+            C1[Low-Level Control<br>Velocity & Balance<br>Closed-loop Logic]
+            C2[High-Level Autonomy<br>Navigation & Planning]
+            
+            %% Data Logging
+            D1[GraphView<br>Visualize & Log Data]
+            
+            %% Connections
+            A1 --> B1
+            A2 --> B1
+            A3 --> B2
+            A4 --> B3
+            A5 --> B4
+            
+            B1 --> C1
+            B2 --> C2
+            B3 --> C2
+            B4 --> C2
+            
+            B1 --> D1
+            B2 --> D1
+            B3 --> D1
+            B4 --> D1
+            
+            %% Styles
+            style A1 fill:#FFC627,stroke:#333,stroke-width:2px,color:#000
+            style A2 fill:#FFC627,stroke:#333,stroke-width:2px,color:#000
+            style A3 fill:#FFC627,stroke:#333,stroke-width:2px,color:#000
+            style A4 fill:#FFC627,stroke:#333,stroke-width:2px,color:#000
+            style A5 fill:#FFC627,stroke:#333,stroke-width:2px,color:#000
+            
+            style B1 fill:#8C1D40,stroke:#333,stroke-width:2px,color:#fff
+            style B2 fill:#8C1D40,stroke:#333,stroke-width:2px,color:#fff
+            style B3 fill:#8C1D40,stroke:#333,stroke-width:2px,color:#fff
+            style B4 fill:#8C1D40,stroke:#333,stroke-width:2px,color:#fff
+            
+            style C1 fill:#000000,stroke:#333,stroke-width:2px,color:#fff
+            style C2 fill:#000000,stroke:#333,stroke-width:2px,color:#fff
+            
+            style D1 fill:#D6EAF8,stroke:#333,stroke-width:2px,color:#000
+        </div>
+        <figcaption style="text-align: center;">Figure 5: Simulation Workflow</figcaption>
+        <br>
+
+        <p>This layered approach ensures that the system can respond quickly to environmental changes while maintaining strategic objectives, enabling a seamless blend of reactive and deliberative behaviors.</p>
+
         <p>Both systems will operate using ROS2 control nodes that process sensor data and execute movement commands in real time.</p>
 
 
@@ -296,7 +383,7 @@
             Final Report              :         des9, 2025-04-20, 2025-04-23
             Presentation Preparation  :         des10, 2025-04-23, 2025-05-01
         </div>
-        <figcaption style="text-align: center;">Figure 5: Gantt Chart of Weekly Milestones</figcaption>
+        <figcaption style="text-align: center;">Figure 6: Gantt Chart of Weekly Milestones</figcaption>
         <br>
 
     </div>
