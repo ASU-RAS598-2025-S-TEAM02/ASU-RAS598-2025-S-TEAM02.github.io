@@ -106,11 +106,11 @@ class ControlPanel extends HTMLElement {
                     <div class="slam-view">SLAM VIEW</div>
                 </div>
                 <div class="button-grid">
-                    <button id="imu-btn">rpi_05/imu</button>
-                    <button id="camera-btn">rpi_05/camera</button>
-                    <button id="esp-btn">esp/imu</button>
+                    <button id="imu-btn">RPi IMU</button>
+                    <button id="camera-btn">RPi Camera</button>
+                    <button id="esp-btn">ESP32 IMU</button>
                 </div>
-                <button class="start-button" id="start-predator-prey-btn">START PREDATOR VS PREY</button>
+                <button class="start-button" id="start-predator-prey-btn">START</button>
             </div>
         `;
     }
