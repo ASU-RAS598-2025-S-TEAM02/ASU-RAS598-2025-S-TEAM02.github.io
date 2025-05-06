@@ -246,6 +246,103 @@
                     </tr>
                 </tbody>
             </table>
+
+            <h2>GUI Application: IMU Map Viewer</h2>
+            <p>This Python script creates a ROS 2-enabled PyQt5 desktop GUI that visualizes real-time IMU data, camera feeds, and occupancy grid maps. It integrates ROS 2 message subscriptions with interactive plotting and status displays, helping users monitor IMU performance and visualize the robot’s environment through a user-friendly interface.</p>
+
+            <p><strong>See code here: <a href="scripts/code_final/imu_data_camera_slam.py" target="_blank">Github Code</a></strong></p>
+            <h3>Key Features:</h3>
+            <ul>
+                <li><strong>Real-Time ROS 2 Subscriptions:</strong>
+                    <ul>
+                        <li><code>RPI IMU (/rpi_05/imu)</code></li>
+                        <li><code>ESP32 IMU (/esp/imu_data)</code></li>
+                        <li><code>Pose (/rpi_05/pose)</code></li>
+                        <li><code>Camera (/rpi_05/oakd/rgb/preview/image_raw)</code></li>
+                        <li><code>Occupancy Grid Map (/rpi_05/map)</code></li>
+                    </ul>
+                </li>
+                <li><strong>Data Visualization:</strong>
+                    <ul>
+                        <li>Live acceleration graphs for both IMU sources.</li>
+                        <li>Graph updates at ~10 Hz using <code>QTimer</code>.</li>
+                        <li>Overlay of ESP and RPI data with visual legends and time series.</li>
+                    </ul>
+                </li>
+                <li><strong>Map Display:</strong>
+                    <ul>
+                        <li>Visualizes occupancy grid maps in grayscale.</li>
+                        <li>Overlays robot position (from pose messages) on the map.</li>
+                        <li>Automatically updates if new map or pose data is received.</li>
+                    </ul>
+                </li>
+                <li><strong>Camera Feed Viewer:</strong>
+                    <ul>
+                        <li>Displays a live RGB camera stream.</li>
+                        <li>Automatically handles camera disconnects or delays.</li>
+                        <li>Shows "feed not available" if inactive.</li>
+                    </ul>
+                </li>
+                <li><strong>IMU Data Query:</strong> Allows users to query historical IMU acceleration data at a specific timestamp using a pop-up input dialog.</li>
+                <li><strong>Status Monitoring:</strong>
+                    <ul>
+                        <li>Displays live status for RPI IMU, ESP IMU, and Pose topic.</li>
+                        <li>Uses color-coded status bar: green (active), orange (partial), red (inactive).</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Libraries Used:</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Library</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>rclpy</code></td>
+                        <td>ROS 2 client library for subscribing to topics</td>
+                    </tr>
+                    <tr>
+                        <td><code>sensor_msgs.msg.Imu</code></td>
+                        <td>Subscribes to IMU data from ESP32 and RPI</td>
+                    </tr>
+                    <tr>
+                        <td><code>geometry_msgs.msg.PoseWithCovarianceStamped</code></td>
+                        <td>Subscribes to robot pose</td>
+                    </tr>
+                    <tr>
+                        <td><code>nav_msgs.msg.OccupancyGrid</code></td>
+                        <td>Subscribes to occupancy map</td>
+                    </tr>
+                    <tr>
+                        <td><code>sensor_msgs.msg.Image</code></td>
+                        <td>Subscribes to RGB image stream</td>
+                    </tr>
+                    <tr>
+                        <td><code>cv_bridge</code></td>
+                        <td>Converts ROS images to OpenCV for GUI display</td>
+                    </tr>
+                    <tr>
+                        <td><code>PyQt5.QtWidgets, QtCore, QtGui</code></td>
+                        <td>GUI layout, timers, and event handling</td>
+                    </tr>
+                    <tr>
+                        <td><code>matplotlib</code></td>
+                        <td>Embedded graph plotting in PyQt using acceleration data</td>
+                    </tr>
+                    <tr>
+                        <td><code>numpy</code></td>
+                        <td>Stores and manipulates IMU history for plotting</td>
+                    </tr>
+                    <tr>
+                        <td><code>OpenCV (cv2)</code></td>
+                        <td>Resizes map images for display; processes grayscale image data</td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
     </div>
 </main>
