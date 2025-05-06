@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Explanation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<!-- Header -->
+<div id="header-placeholder"></div>
+<script src="modules/header/header.js"></script>
+
+<!-- Main Content -->
+<main class="flex-grow-1">
+    <div class="container mt-5 pt-3">
+        <h1 class="text-center mb-4">Code Explanation</h1>
+        <hr class="my-4">
+
+        <!-- Instructions Section -->
+        <section class="mb-5">
+            <h2>Instructions to Start Up the Code</h2>
+            <p>Follow these steps to set up and run the code for the project:</p>
+            <ol>
+                <li>Ensure all required hardware is connected and powered on.</li>
+                <li>Install the necessary software dependencies as outlined in the project documentation.</li>
+                <li>Run the main script using the provided instructions for your specific environment.</li>
+            </ol>
+        </section>
+
+        <!-- Arduino IDE Section -->
+        <section class="mb-5">
+            <h2>Arduino IDE</h2>
+            <p>The Arduino IDE is used to program the microcontroller. Follow these steps:</p>
+            <ol>
+                <li>Open the Arduino IDE and load the provided `.ino` file.</li>
+                <li>Ensure the correct board and port are selected under the <strong>Tools</strong> menu.</li>
+                <li>Upload the code to the microcontroller by clicking the <strong>Upload</strong> button.</li>
+            </ol>
+        </section>
+
+        <!-- IMU Publishing Section -->
+        <section class="mb-5">
+            <h2>IMU Publishing</h2>
+            <p>The IMU data is published to a ROS topic for real-time processing. To start IMU publishing:</p>
+            <ol>
+                <li>Ensure the IMU sensor is connected to the microcontroller.</li>
+                <li>Run the ROS node responsible for publishing IMU data using the command:</li>
+                <pre><code>rosrun imu_publisher imu_node</code></pre>
+                <li>Verify the data is being published by echoing the topic:</li>
+                <pre><code>rostopic echo /imu/data</code></pre>
+            </ol>
+        </section>
+
+        <!-- Aruco Marker Detection Section -->
+        <section class="mb-5">
+            <h2>Aruco Marker Detection</h2>
+            <p>The Aruco marker detection algorithm identifies markers in the camera feed. To run the detection:</p>
+            <ol>
+                <li>Ensure the camera is connected and accessible.</li>
+                <li>Run the Aruco detection script using the command:</li>
+                <pre><code>python aruco_detect.py</code></pre>
+                <li>Markers will be displayed in the video feed with their IDs and positions.</li>
+            </ol>
+        </section>
+
+        <!-- Plotlib and Aruco Follow Code Section -->
+        <section class="mb-5">
+            <h2>Plotlib and Aruco Follow Code</h2>
+            <p>The Plotlib library is used for visualizing data, and the Aruco follow code enables the robot to follow markers. To execute:</p>
+            <ol>
+                <li>Install the required Python libraries using:</li>
+                <pre><code>pip install matplotlib opencv-python</code></pre>
+                <li>Run the Aruco follow script:</li>
+                <pre><code>python aruco_follow.py</code></pre>
+                <li>Observe the robot's movement as it follows the detected markers.</li>
+            </ol>
+        </section>
+    </div>
+</main>
+
+<!-- Footer -->
+<div id="footer-placeholder"></div>
+<script src="modules/footer/footer.js"></script>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
