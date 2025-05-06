@@ -343,6 +343,22 @@
                     </tr>
                 </tbody>
             </table>
+
+            <h2>Steps to Run the Code</h2>
+            <ol>
+                <li><strong>Step 1:</strong> On Turtlebot:
+                    <pre><code>ros2 launch turtlebot4_bringup robot.launch.py namespace:=/rpi_05</code></pre>
+                </li>
+                <li><strong>Step 2:</strong> On VM: Go to your workspace and run:
+                    <pre><code>ros2 run imu_publisher imu</code></pre>
+                </li>
+                <li><strong>Step 3:</strong> From the home directory or where you saved the file <code>aruco_pose_estimator.py</code>, run:
+                    <pre><code>python3 -m predprey.aruco_pose_estimator</code></pre>
+                </li>
+                <li><strong>Step 4:</strong> In <code>workspaces/src/package/python</code> file, run:
+                    <pre><code>python3 teleop.py</code></pre>
+                </li>
+            </ol>
         </section>
     </div>
 </main>

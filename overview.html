@@ -56,7 +56,8 @@
             <br><br>
             <b>"How can the integration of ROS2-based control and sensor fusion improve the accuracy and stability of a predator-prey simulation in dynamic environments?"</b>
             <br><br>
-            By leveraging ROS2's capabilities for real-time communication, sensor integration, and adaptive control, this project seeks to simulate biologically inspired behaviors in autonomous robots. The predator-prey model will demonstrate advanced navigation strategies, multi-agent coordination, and decision-making under dynamic conditions.
+            <h4>Goal</h4>
+            The primary goal of this project is to develop a robust predator-prey simulation that leverages ROS2 and TurtleBot 4 Lite to demonstrate biologically inspired behaviors. By integrating advanced sensor fusion, real-time decision-making, and adaptive control strategies, the project aims to provide insights into multi-agent coordination and autonomous navigation in dynamic environments.
         </p>
 
         <div class="mermaid" style="text-align: center;">
@@ -345,6 +346,53 @@
             <li>It fosters interdisciplinary learning across robotics, artificial intelligence, biology-inspired systems, and control theory.</li>
             <li>The project could serve as a foundation for course development by providing an engaging example of complex theoretical concepts applied in practice—promoting critical thinking, problem-solving skills, and technical expertise essential for advancing robotics education.</li>
         </ol>
+
+        <h3>Data Collection and Validation</h3>
+        <p>Our initial data collection process involved setting up the TurtleBot 4 Lite and ESP32 IMU in a controlled environment to gather sensor readings. We focused on capturing data from the camera and IMU to understand their performance and limitations. The following steps were taken:</p>
+        <ul>
+            <li><b>Sensor Calibration:</b> Ensured accurate readings by calibrating the IMU and depth camera before data collection.</li>
+            <li><b>Test Scenarios:</b> Conducted tests in various lighting conditions and obstacle configurations to evaluate sensor reliability.</li>
+            <li><b>Data Logging:</b> Used GUI to show data for live analysis.</li>
+        </ul>
+
+        <p>This initial data informed our project direction by highlighting areas that required improvement, such as noise reduction in IMU data. While the process was largely suitable, we had to re-collect data after refining our filtering techniques to ensure consistency and accuracy.</p>
+
+        <h4>Model Fitting Process</h4>
+        <p>To fit our control and decision-making models, we iteratively adjusted parameters based on the collected data:</p>
+        <ul>
+            <li>Used Kalman filters to combine ESP32 IMU and Turtlebot IMU data for improved localization accuracy.</li>
+            <li>Used a proportional controller algorithm to optimize the predator's reaction and response time.</li>
+        </ul>
+
+        <h4>Validation and Quantifying Success</h4>
+        <p>We validated our results by comparing the system's performance against predefined metrics:</p>
+        <ul>
+            <li><b>Accuracy:</b> Measured the error in position estimation using ground truth data from the initial motion capture system.</li>
+            <li><b>Response Time:</b> Evaluated the time taken by the predator to adjust its trajectory based on prey movements.</li>
+            <li><b>Path Efficiency:</b> Analyzed the predator's path from Nav2 to ensure minimal deviations from the optimal trajectory.</li>
+        </ul>
+
+        <p>Graphical examples of our validation process include:</p>
+        <ul>
+            <li>Plots showing the reduction in IMU noise after applying filters. For detailed analysis, see <a href="assignment3.html">Assignment 3</a>.</li>
+        </ul>
+
+        <h3>Reflection on Tradeoffs</h3>
+        <p>Throughout the development of this project, our team encountered several tradeoffs that required careful consideration and balancing of competing goals. One of the most significant tradeoffs involved the configuration of the IMU (Inertial Measurement Unit) data filtering:</p>
+
+        <ul>
+            <li><b>Filtering Strength:</b> A stronger filter provided smoother and more stable data by reducing noise and high-frequency variations. However, this approach made the system less sensitive to rapid changes, potentially causing a delay in detecting critical events or losing important data.</li>
+            <li><b>Raw vs. Filtered Data:</b> Using less filtered, raw data allowed for higher sensitivity and faster response times. However, this increased the risk of accumulating errors during double integration, leading to significant drift over time and reduced accuracy in position estimation.</li>
+        </ul>
+
+        <p>To balance these competing goals, we adopted a hybrid approach:</p>
+        <ul>
+            <li>We applied moderate filtering (EKF) to reduce noise while preserving responsiveness to dynamic changes in the environment.</li>
+            <li>We implemented correction techniques by comparing to Turtlebot IMU to mitigate drift in  readings, ensuring long-term stability without sacrificing sensitivity.</li>
+            <li>We used complementary filtering to combine IMU data with other sensor inputs, such as the camera, to improve overall accuracy and robustness.</li>
+        </ul>
+
+        <p>This tradeoff allowed us to achieve a balance between accuracy and responsiveness, ensuring that the system could operate effectively in real-time while minimizing the impact of drift and noise on decision-making processes.</p>
 
         <h3>Future Work</h3>
         <p>During the development phase, we successfully implemented SLAM in isolation. Using the TurtleBot 4 Lite's LiDAR and depth camera, we were able to generate accurate occupancy grids and real-time maps of the environment. The system performed well in controlled scenarios, with minimal drift and consistent map updates.</p>
