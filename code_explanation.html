@@ -19,64 +19,233 @@
         <h1 class="text-center mb-4">Code Explanation</h1>
         <hr class="my-4">
 
-        <!-- Instructions Section -->
-        <section class="mb-5">
-            <h2>Instructions to Start Up the Code</h2>
-            <p>Follow these steps to set up and run the code for the project:</p>
-            <ol>
-                <li>Ensure all required hardware is connected and powered on.</li>
-                <li>Install the necessary software dependencies as outlined in the project documentation.</li>
-                <li>Run the main script using the provided instructions for your specific environment.</li>
-            </ol>
-        </section>
+        <!-- Code Overview Section -->
+        <section class="mt-4">
+            <h2>Aruco Pose Estimator</h2>
+            <p>This Python script implements a ROS 2 node that detects ArUco markers in camera images, estimates their 3D positions, and publishes the location of the first detected marker using ROS messages.</p>
 
-        <!-- Arduino IDE Section -->
-        <section class="mb-5">
-            <h2>Arduino IDE</h2>
-            <p>The Arduino IDE is used to program the microcontroller. Follow these steps:</p>
-            <ol>
-                <li>Open the Arduino IDE and load the provided `.ino` file.</li>
-                <li>Ensure the correct board and port are selected under the <strong>Tools</strong> menu.</li>
-                <li>Upload the code to the microcontroller by clicking the <strong>Upload</strong> button.</li>
-            </ol>
-        </section>
+            <p><strong>See code here: <a href="scripts/code_final/Aruco_detector.py" target="_blank">Github Code</a></strong></p>
+            <h3>Key Features:</h3>
+            <ul>
+                <li><strong>Subscribes to:</strong>
+                    <ul>
+                        <li><code>sensor_msgs/msg/Image</code>: for real-time camera images.</li>
+                        <li><code>sensor_msgs/msg/CameraInfo</code>: for camera intrinsics (camera matrix and distortion coefficients).</li>
+                    </ul>
+                </li>
+                <li><strong>ArUco Marker Detection:</strong>
+                    <ul>
+                        <li>Converts images to grayscale.</li>
+                        <li>Detects ArUco markers using OpenCV’s predefined dictionary.</li>
+                        <li>Estimates the 3D pose (rotation and translation vectors) of each marker using camera calibration data.</li>
+                    </ul>
+                </li>
+                <li><strong>Publishes:</strong>
+                    <ul>
+                        <li>3D position (<code>x, y, z</code>) of the first detected marker as a <code>geometry_msgs/msg/PointStamped</code> message on topic <code>/aruco_1</code>.</li>
+                    </ul>
+                </li>
+                <li><strong>Visualizes:</strong>
+                    <ul>
+                        <li>Uses OpenCV to draw detected markers and coordinate axes on the image feed (<code>cv2.imshow</code>).</li>
+                    </ul>
+                </li>
+            </ul>
 
-        <!-- IMU Publishing Section -->
-        <section class="mb-5">
-            <h2>IMU Publishing</h2>
-            <p>The IMU data is published to a ROS topic for real-time processing. To start IMU publishing:</p>
-            <ol>
-                <li>Ensure the IMU sensor is connected to the microcontroller.</li>
-                <li>Run the ROS node responsible for publishing IMU data using the command:</li>
-                <pre><code>rosrun imu_publisher imu_node</code></pre>
-                <li>Verify the data is being published by echoing the topic:</li>
-                <pre><code>rostopic echo /imu/data</code></pre>
-            </ol>
-        </section>
+            <h3>Libraries Used:</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Library</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>rclpy</code></td>
+                        <td>ROS 2 Python client library for node creation, subscription, and publishing</td>
+                    </tr>
+                    <tr>
+                        <td><code>sensor_msgs.msg</code></td>
+                        <td>For handling camera image (<code>Image</code>) and calibration data (<code>CameraInfo</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><code>geometry_msgs.msg</code></td>
+                        <td>For publishing the marker position (<code>PointStamped</code>)</td>
+                    </tr>
+                    <tr>
+                        <td><code>cv_bridge</code></td>
+                        <td>Converts between ROS image messages and OpenCV images</td>
+                    </tr>
+                    <tr>
+                        <td><code>cv2 / cv2.aruco</code></td>
+                        <td>Detects markers and estimates their pose using computer vision</td>
+                    </tr>
+                    <tr>
+                        <td><code>numpy</code></td>
+                        <td>Used for matrix and vector operations related to camera intrinsics</td>
+                    </tr>
+                    <tr>
+                        <td><code>predprey.Turtlebot</code></td>
+                        <td>Custom helper class to access camera topic names (project-specific)</td>
+                    </tr>
+                </tbody>
+            </table>
 
-        <!-- Aruco Marker Detection Section -->
-        <section class="mb-5">
-            <h2>Aruco Marker Detection</h2>
-            <p>The Aruco marker detection algorithm identifies markers in the camera feed. To run the detection:</p>
-            <ol>
-                <li>Ensure the camera is connected and accessible.</li>
-                <li>Run the Aruco detection script using the command:</li>
-                <pre><code>python aruco_detect.py</code></pre>
-                <li>Markers will be displayed in the video feed with their IDs and positions.</li>
-            </ol>
-        </section>
+            <h2>IMU Filter and Plotter</h2>
+            <p>This Python script defines a ROS 2 node that integrates IMU, Odometry, and ArUco marker data to enable autonomous waypoint navigation in a 2m x 2m area. It uses an A* algorithm to generate a path from the origin to a self-selected waypoint based on detected stationary behavior.</p>
 
-        <!-- Plotlib and Aruco Follow Code Section -->
-        <section class="mb-5">
-            <h2>Plotlib and Aruco Follow Code</h2>
-            <p>The Plotlib library is used for visualizing data, and the Aruco follow code enables the robot to follow markers. To execute:</p>
-            <ol>
-                <li>Install the required Python libraries using:</li>
-                <pre><code>pip install matplotlib opencv-python</code></pre>
-                <li>Run the Aruco follow script:</li>
-                <pre><code>python aruco_follow.py</code></pre>
-                <li>Observe the robot's movement as it follows the detected markers.</li>
-            </ol>
+            <p><strong>See code here: <a href="scripts/code_final/filter_and_plotter.py" target="_blank">Github Code</a></strong></p>
+            <h3>Key Features:</h3>
+            <ul>
+                <li><strong>Sensor Inputs:</strong>
+                    <ul>
+                        <li><code>IMU Data (/esp_05/imu_data)</code>: for estimating motion and displacement.</li>
+                        <li><code>Odometry Data (/rpi_05/odom)</code>: to track the robot's actual position.</li>
+                        <li><code>Aruco Marker Position (/aruco_1)</code>: to initialize the robot's position using marker detection.</li>
+                    </ul>
+                </li>
+                <li><strong>Waypoint Detection:</strong> When the robot is stationary for a defined duration, it selects the current location as a waypoint.</li>
+                <li><strong>Path Planning:</strong> Uses a grid-based A* path planning algorithm to compute a path to the waypoint.</li>
+                <li><strong>Navigation Control:</strong> Commands velocity (<code>cmd_vel</code>) using proportional control based on heading and distance to the next grid point on the path.</li>
+                <li><strong>Visualization:</strong>
+                    <ul>
+                        <li>Plots paths of:</li>
+                        <ul>
+                            <li>ESP32-estimated position (from IMU)</li>
+                            <li>TurtleBot odometry</li>
+                            <li>Waypoint location</li>
+                        </ul>
+                        <li>Uses matplotlib to render a 2D navigation plot in real time.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Libraries Used:</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Library</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>rclpy</code></td>
+                        <td>ROS 2 Python client for node creation and communication</td>
+                    </tr>
+                    <tr>
+                        <td><code>sensor_msgs.msg.Imu</code></td>
+                        <td>For IMU data subscription</td>
+                    </tr>
+                    <tr>
+                        <td><code>nav_msgs.msg.Odometry</code></td>
+                        <td>For odometry data subscription</td>
+                    </tr>
+                    <tr>
+                        <td><code>geometry_msgs.msg.*</code></td>
+                        <td>For publishing velocity (<code>Twist</code>) and handling points/transforms</td>
+                    </tr>
+                    <tr>
+                        <td><code>tf2_ros, TransformBroadcaster</code></td>
+                        <td>For managing and broadcasting TF frames</td>
+                    </tr>
+                    <tr>
+                        <td><code>tf_transformations</code></td>
+                        <td>To convert quaternion orientation to Euler angles (yaw)</td>
+                    </tr>
+                    <tr>
+                        <td><code>numpy</code></td>
+                        <td>Used for math operations like acceleration, velocity, pose calculations</td>
+                    </tr>
+                    <tr>
+                        <td><code>matplotlib</code></td>
+                        <td>For real-time plotting of paths and waypoints</td>
+                    </tr>
+                    <tr>
+                        <td><code>collections.deque</code></td>
+                        <td>Stores and updates recent positions (ESP and RPi)</td>
+                    </tr>
+                    <tr>
+                        <td><code>PriorityQueue</code></td>
+                        <td>Used in A* algorithm for efficient path planning</td>
+                    </tr>
+                    <tr>
+                        <td><code>time</code></td>
+                        <td>For checking movement durations</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>ESP32 IMU Publisher</h2>
+            <p>This Python script defines a ROS 2 node named <code>ESP32IMUNode</code> that interfaces with an ESP32-based IMU sensor over serial. It reads IMU data from the ESP32, applies low-pass filtering to smooth acceleration readings, implements a Zero Velocity Update (ZUPT) technique, and publishes the filtered data as a standard ROS 2 <code>Imu</code> message to the topic <code>/esp_05/imu_data</code>.</p>
+
+            <p><strong>See code here: <a href="scripts/code_final/Imu_publisher.py" target="_blank">Github Code</a></strong></p>
+            <h3>Key Features:</h3>
+            <ul>
+                <li><strong>Serial Connection:</strong>
+                    <ul>
+                        <li>Connects to ESP32 over <code>/dev/ttyUSB0</code> at 115200 baud.</li>
+                        <li>Expects IMU data in CSV format: <code>ax, ay, az, gx, gy, gz, qx, qy, qz, qw</code>.</li>
+                    </ul>
+                </li>
+                <li><strong>Signal Processing:</strong>
+                    <ul>
+                        <li>Uses a Butterworth low-pass filter to reduce noise in linear acceleration.</li>
+                        <li>Applies ZUPT: if total acceleration magnitude is very low, assumes no motion and zeroes the values.</li>
+                    </ul>
+                </li>
+                <li><strong>IMU Data Publishing:</strong>
+                    <ul>
+                        <li>Converts parsed and filtered values into a <code>sensor_msgs/msg/Imu</code> message.</li>
+                        <li>Publishes at 100 Hz to the topic <code>/esp_05/imu_data</code>.</li>
+                        <li>Includes orientation, angular velocity, and linear acceleration with associated covariance matrices.</li>
+                    </ul>
+                </li>
+                <li><strong>Error Handling & Cleanup:</strong>
+                    <ul>
+                        <li>Logs serial connection errors.</li>
+                        <li>Catches serial parsing exceptions.</li>
+                        <li>Ensures serial port is closed properly on shutdown.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Libraries Used:</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Library</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>rclpy</code></td>
+                        <td>ROS 2 Python client library</td>
+                    </tr>
+                    <tr>
+                        <td><code>serial (pyserial)</code></td>
+                        <td>Communicates with ESP32 over USB serial</td>
+                    </tr>
+                    <tr>
+                        <td><code>sensor_msgs.msg.Imu</code></td>
+                        <td>ROS message type for IMU sensor data</td>
+                    </tr>
+                    <tr>
+                        <td><code>std_msgs.msg.Header</code></td>
+                        <td>Adds timestamps and frame identifiers</td>
+                    </tr>
+                    <tr>
+                        <td><code>scipy.signal.butter, lfilter</code></td>
+                        <td>Implements a digital Butterworth low-pass filter</td>
+                    </tr>
+                    <tr>
+                        <td><code>numpy</code></td>
+                        <td>Math operations and vector calculations</td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
     </div>
 </main>
