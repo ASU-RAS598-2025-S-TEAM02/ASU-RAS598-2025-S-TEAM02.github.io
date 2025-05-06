@@ -54,7 +54,7 @@
         <p> 
             This project aims to explore predator-prey dynamics using the TurtleBot 4 Lite in a controlled ROS Humble environment. The primary research question driving this work is:
             <br><br>
-            <b>"How can the integration of ROS2-based control, sensor fusion, and SLAM improve the accuracy and stability of a predator-prey simulation in dynamic environments?"</b>
+            <b>"How can the integration of ROS2-based control and sensor fusion improve the accuracy and stability of a predator-prey simulation in dynamic environments?"</b>
             <br><br>
             By leveraging ROS2's capabilities for real-time communication, sensor integration, and adaptive control, this project seeks to simulate biologically inspired behaviors in autonomous robots. The predator-prey model will demonstrate advanced navigation strategies, multi-agent coordination, and decision-making under dynamic conditions.
         </p>
@@ -76,7 +76,6 @@
         <h3>Sensor Integration</h3>
         <p>Sensor data will play a critical role in enabling autonomous behavior for both the predator and prey robots. The following sensors on the TurtleBot 4 Lite will be utilized:</p>
         <ul>
-            <li><b>LiDAR:</b> Used for obstacle detection and path planning to ensure safe navigation within the environment. LiDAR data will also aid in mapping the surroundings using SLAM.</li>
             <li><b>Depth Camera:</b> Employed to identify the prey's position in real-time, enabling the predator to dynamically adjust its trajectory for pursuit.</li>
             <li><b>IMU (Inertial Measurement Unit):</b> Ensures stable movement by compensating for environmental variations and assisting with precise turning angles.</li>
         </ul>
@@ -87,16 +86,8 @@
                 <ul>
                     <li>Outlier removal using statistical filters to eliminate noise from spurious reflections.</li>
                     <li>Downsampling point clouds to reduce computational load while preserving essential spatial information.</li>
-                    <!-- <li>Applying voxel grid filters for uniform data representation in SLAM algorithms.</li> -->
                 </ul>
             </li>
-            <!-- <li><b>Depth Camera:</b> 
-                <ul>
-                    <li>Median filtering to smooth depth images and reduce noise caused by environmental factors.</li>
-                    <li>Edge detection algorithms to enhance object boundaries for better prey tracking.</li>
-                    <li>Calibration to correct lens distortion and ensure accurate depth measurements.</li>
-                </ul>
-            </li> -->
             <li><b>IMU:</b> 
                 <ul>
                     <li>Barlett and/or lowpass filtering to remove high-frequency noise from accelerometer and gyroscope data. (See <a href="assignment3.html">Filtering Analysis</a>)</li>
@@ -154,13 +145,6 @@
             <li>Movement algorithms will be refined based on logged data to optimize speed, turn rates, and responsiveness to obstacles.</li>
             <li>Pursuit and evasion strategies will be iteratively improved by analyzing performance metrics such as reaction time, accuracy of detection, and path efficiency.</li>
         </ul>
-
-        <h4>Final Demonstration</h4>
-        <ul>
-            <li>The predator robot will use real-time sensor data to track and pursue the prey based on continuously updated positions.</li>
-            <li>The prey robot will leverage sensor feedback to evade capture for three minutes by navigating dynamically around obstacles.</li>
-        </ul>
-        <p>This setup will showcase how adaptive control systems driven by sensory inputs can influence robot behavior in real-world scenarios.</p>
 
         <h3>Interaction & Interface Design</h3>
         <p>To facilitate interaction with the system and monitor performance, the following interface components will be developed:</p>
@@ -231,7 +215,7 @@
         <ul>
             <li>The predator robot will use a pursuit algorithm (ie. proportional navigation) that dynamically updates its trajectory based on the prey's last known position.</li>
             <li>If the prey is lost from view, a search pattern algorithm will be activated until the target is reacquired.</li>
-            <li>Obstacle avoidance logic (ie. SLAM) ensures smooth navigation while pursuing the prey.</li>
+            <li>Obstacle avoidance logic ensures smooth navigation while pursuing the prey.</li>
         </ul>
 
         <h4>Prey Logic</h4>
@@ -241,80 +225,10 @@
             <li>Sensor feedback will guide path adjustments to navigate around obstacles effectively.</li>
         </ul>
 
-        <h4>SLAM Demonstration</h4>
-        <div style="display: flex; justify-content: center;">
-            <video controls width="75%" style="border: 1px solid #ccc; border-radius: 5px;">
-            <source src="assets/slam_data/slam_demonstration.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-            </video>
-        </div>
-        <figcaption style="text-align: center;">Figure 5: SLAM Demonstration Video</figcaption>
-        <br>
-
         <h4>ROS2 RQT Graph</h4>
         <p>The graph provides a visual representation of the nodes and topics in the system, showcasing the communication flow between various components.</p>
-        <div class="mermaid" style="text-align: center;">
-            graph TD
-
-            %% Color Classes
-            classDef asuGold fill:#FFC627,stroke:#000000,stroke-width:2px,color:#000000;
-            classDef asuMaroon fill:#8C1D40,stroke:#000000,stroke-width:2px,color:#FFFFFF;
-            classDef clusterStyle fill:#f2f2f2,stroke:#333,stroke-width:1px;
-
-            %% Outer Cluster for rpi_05 Node
-            subgraph rpi_05
-                class rpi_05 clusterStyle;
-
-                %% navigate_to_pose cluster
-                subgraph navigate_to_pose
-                    class navigate_to_pose clusterStyle;
-
-                    A1[rpi_05/navigate_to_pose]
-                    A2[rpi_05/navigate_to_pose/_action]
-                    A3[rpi_05/navigate_to_pose/_action/feedback]
-                    A4[rpi_05/navigate_to_pose/_action/status]
-
-                    A1 --> A2
-                    A2 --> A3
-                    A2 --> A4
-
-                    class A1,A2,A3,A4 asuMaroon;
-                end
-
-                %% navigate_through_poses cluster
-                subgraph navigate_through_poses
-                    class navigate_through_poses clusterStyle;
-
-                    B1[rpi_05/navigate_through_poses]
-                    B2[rpi_05/navigate_through_poses/_action]
-                    B3[rpi_05/navigate_through_poses/_action/feedback]
-                    B4[rpi_05/navigate_through_poses/_action/status]
-
-                    B1 --> B2
-                    B2 --> B3
-                    B2 --> B4
-
-                    class B1,B2,B3,B4 asuMaroon;
-                end
-
-                %% Standalone Topics
-                C1[rpi_05/waypoints]
-                C2[rpi_05/map]
-                D[rpi_05/transform_listener_impl_55c85d606e10]
-                class C1,C2 asuGold;
-
-                %% Inferred useful connections
-                C1 --> B1
-                C2 --> A1
-                C2 --> B1
-            end
-
-            %% External Connections
-            E[imu_data_logger]
-
-            D --> E
-
-            class D,E asuGold;
+        <div style="display: flex; justify-content: center;">
+            <img src="assets/ros/rqt_graph.png" alt="ROS2 RQT Graph" style="max-width: 100%; border: 1px solid #ccc; border-radius: 5px;">
         </div>
         <figcaption style="text-align: center;">Figure 6: ROS2 RQT Graph</figcaption>
         <br>
@@ -352,13 +266,11 @@
             A1[IMU - RPI]
             A2[IMU - ESP]
             A3[Camera Feed]
-            A4[Occupancy Grid - SLAM]
             A5[Pose Data]
             
             %% Data Processing
             B1[IMU Handler<br>Orientation Estimation<br>+ Filtering]
             B2[Camera Processor<br>Object Detection]
-            B3[Map Processor<br>Update Grid]
             B4[Pose Handler<br>Estimate Pose<br>+ Smoothing]
             
             %% Control Layers
@@ -372,29 +284,24 @@
             A1 --> B1
             A2 --> B1
             A3 --> B2
-            A4 --> B3
             A5 --> B4
             
             B1 --> C1
             B2 --> C2
-            B3 --> C2
             B4 --> C2
             
             B1 --> D1
             B2 --> D1
-            B3 --> D1
             B4 --> D1
             
             %% Styles
             style A1 fill:#FFC627,stroke:#333,stroke-width:2px,color:#000
             style A2 fill:#FFC627,stroke:#333,stroke-width:2px,color:#000
             style A3 fill:#FFC627,stroke:#333,stroke-width:2px,color:#000
-            style A4 fill:#FFC627,stroke:#333,stroke-width:2px,color:#000
             style A5 fill:#FFC627,stroke:#333,stroke-width:2px,color:#000
             
             style B1 fill:#8C1D40,stroke:#333,stroke-width:2px,color:#fff
             style B2 fill:#8C1D40,stroke:#333,stroke-width:2px,color:#fff
-            style B3 fill:#8C1D40,stroke:#333,stroke-width:2px,color:#fff
             style B4 fill:#8C1D40,stroke:#333,stroke-width:2px,color:#fff
             
             style C1 fill:#000000,stroke:#333,stroke-width:2px,color:#fff
@@ -422,14 +329,13 @@
 
 
         <h3>Final Demonstration</h3>
-        <p>This will feature an interactive predator-prey simulation in a controlled classroom environment:</p>
-        <ol>
+        <ul>
+            <li>The predator robot will use real-time sensor data to track and pursue the prey based on continuously updated positions.</li>
+            <li>The prey robot will leverage sensor feedback to evade capture for three minutes by navigating dynamically around obstacles.</li>
             <li>One TurtleBot 4 Lite robot (predator) and an IMU-equipped ESP32 (prey) will operate within a 3m x 3m area containing obstacles (e.g., classroom furniture).</li>
-            <li>The prey robot must evade capture for three minutes while navigating dynamically around obstacles.</li>
-            <li>The predator robot must actively pursue the prey using real-time sensor data and adaptive navigation strategies.</li>
             <li>A projector will display RViz2 visualizations of sensor data and robot paths for audience observation.</li>
-        </ol>
-        <p>This setup highlights how biologically inspired behaviors can be modeled using robotics frameworks like ROS2 while demonstrating advanced multi-agent coordination.</p>
+        </ul>
+        <p>This setup will showcase how adaptive control systems driven by sensory inputs can influence robot behavior in real-world scenarios. It highlights how biologically inspired behaviors can be modeled using robotics frameworks like ROS2 while demonstrating advanced multi-agent coordination.</p>
 
         <h3>Impact</h3>
         <p>This project has significant potential to enhance both personal learning outcomes and broader educational value:</p>
@@ -439,6 +345,32 @@
             <li>It fosters interdisciplinary learning across robotics, artificial intelligence, biology-inspired systems, and control theory.</li>
             <li>The project could serve as a foundation for course development by providing an engaging example of complex theoretical concepts applied in practice—promoting critical thinking, problem-solving skills, and technical expertise essential for advancing robotics education.</li>
         </ol>
+
+        <h3>Future Work</h3>
+        <p>During the development phase, we successfully implemented SLAM in isolation. Using the TurtleBot 4 Lite's LiDAR and depth camera, we were able to generate accurate occupancy grids and real-time maps of the environment. The system performed well in controlled scenarios, with minimal drift and consistent map updates.</p>
+
+        <p>However, when attempting to run SLAM alongside the localization and graphical display of the predator and prey, we encountered several challenges:</p>
+        <ul>
+            <li><b>Service Launch Issues:</b> The TurtleBot 4 services were not always launching successfully, and at times, we were unable to echo the topics to verify their functionality.</li>
+            <li><b>SLAM Launch Failures:</b> The SLAM process occasionally failed to fully launch due to communication issues between the Create 3 base and the Raspberry Pi.</li>
+        </ul>
+
+        <p>To address these issues, we explored the following solutions:</p>
+        <ul>
+            <li>Investigating and resolving the root causes of service launch failures by reviewing logs and ensuring proper initialization sequences.</li>
+            <li>Improving the communication reliability between the Create 3 base and the Raspberry Pi by optimizing network configurations and verifying hardware connections.</li>
+        </ul>
+
+        <p>However, we could not get it fully integrated in time for the submission of this project.</p>
+
+        <div style="display: flex; justify-content: center;">
+            <video controls width="75%" style="border: 1px solid #ccc; border-radius: 5px;">
+            <source src="assets/slam_data/slam_demonstration.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+            </video>
+        </div>
+        <figcaption style="text-align: center;">Figure 5: SLAM Demonstration Video</figcaption>
+        <br>
 
 
         <h3>Advising</h3>
@@ -460,7 +392,7 @@
             Real-World Testing        :         des7, 2025-04-07, 2025-04-20
             section Finalization
             Data Analysis             :         des8, 2025-04-20, 2025-04-20
-            Final Report              :         des9, 2025-04-20, 2025-04-23
+            Final Report              :         des9, 2025-04-20, 2025-05-05
             Presentation Preparation  :         des10, 2025-04-23, 2025-05-01
         </div>
         <figcaption style="text-align: center;">Figure 8: Gantt Chart of Weekly Milestones</figcaption>
